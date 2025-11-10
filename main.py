@@ -21,12 +21,15 @@ def start_timer():
     global current_rep
 
     if current_rep in WORK_REPS:
+        timer_label.config(text="WORK", fg=GREEN)
         count_down(WORK_MINUTES * 60)
     elif current_rep in SHORT_BREAK_REPS:
+        timer_label.config(text="SHORT\nBREAK", fg=PINK)
         count_down(SHORT_BREAK_MINUTES * 60)
     else:
         # We can assume we are now at rep 8, aka "long" break
         current_rep = 0
+        timer_label.config(text="LONG\nBREAK", fg=RED)
         count_down(LONG_BREAK_MINUTES * 60)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
@@ -52,7 +55,7 @@ def count_down(count):
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Pomodoro")
-window.minsize(height=475, width=300)
+window.minsize(height=500, width=300)
 window.config(background=YELLOW, padx=50, pady=50)
 
 canvas = Canvas(width=205, height=224, background=YELLOW, highlightthickness=0)
