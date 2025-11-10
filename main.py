@@ -18,14 +18,18 @@ timer = None
 
 # ---------------------------- TIMER RESET ------------------------------- #
 def reset_timer():
+    global current_rep
     global timer
     global work_reps_completed
 
+    # stop active countdown
     window.after_cancel(timer)
 
-    timer_label.config(text="Timer", fg=GREEN)
-    canvas.itemconfig(timer_text, text=f"00:00")
+    # reset variables and labels
+    current_rep = 1
     work_reps_completed = ""
+    timer_label.config(text="Timer", fg=GREEN)
+    canvas.itemconfig(timer_text, text="00:00")
     display_completed_work_reps()
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
