@@ -6,27 +6,47 @@ RED = "#e7305b"
 GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Arial"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
-LONG_BREAK_MIN = 20
+WORK_MINUTES = 25
+SHORT_BREAK_MINUTES = 5
+LONG_BREAK_MINUTES = 20
+WORK_REPS = [1, 3, 5, 7]
+SHORT_BREAK_REPS = [2, 4, 6]
+current_rep = 1
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
-    count_down(1500)
+    global current_rep
+
+    if current_rep in WORK_REPS:
+        count_down(WORK_MINUTES * 60)
+    elif current_rep in SHORT_BREAK_REPS:
+        count_down(SHORT_BREAK_MINUTES * 60)
+    else:
+        # We can assume we are now at rep 8, aka "long" break
+        current_rep = 0
+        count_down(LONG_BREAK_MINUTES * 60)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
+    global current_rep
+
     if count >= 0:
         minutes = math.floor(count/60)
         seconds = count % 60
 
         if seconds < 10:
+            # NB// The line below uses dynamic typing
             seconds = "0" + str(seconds)
 
         canvas.itemconfig(timer_text, text=f"{minutes}:{seconds}")
-        window.after(100, count_down, count - 1)
+
+        if seconds == "00":
+            current_rep += 1
+            window.after(500, start_timer)
+        else:
+            window.after(200, count_down, count - 1)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
