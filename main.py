@@ -9,6 +9,7 @@ FONT_NAME = "Arial"
 WORK_MINUTES = 25
 SHORT_BREAK_MINUTES = 5
 LONG_BREAK_MINUTES = 20
+COUNTDOWN_STEP_MILLISECONDS = 1000
 WORK_REPS = [1, 3, 5, 7]
 SHORT_BREAK_REPS = [2, 4, 6]
 current_rep = 1
@@ -42,11 +43,11 @@ def count_down(count):
 
         canvas.itemconfig(timer_text, text=f"{minutes}:{seconds}")
 
-        if seconds == "00":
+        if seconds == "00" and minutes == 0:
             current_rep += 1
-            window.after(500, start_timer)
+            window.after(COUNTDOWN_STEP_MILLISECONDS, start_timer)
         else:
-            window.after(200, count_down, count - 1)
+            window.after(COUNTDOWN_STEP_MILLISECONDS, count_down, count - 1)
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
