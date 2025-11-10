@@ -13,8 +13,9 @@ COUNTDOWN_STEP_MILLISECONDS = 1000
 WORK_REPS = [1, 3, 5, 7]
 SHORT_BREAK_REPS = [2, 4, 6]
 current_rep = 1
+work_reps_completed = ""
 
-# ---------------------------- TIMER RESET ------------------------------- # 
+# ---------------------------- TIMER RESET ------------------------------- #
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
 def start_timer():
@@ -24,13 +25,20 @@ def start_timer():
         timer_label.config(text="WORK", fg=GREEN)
         count_down(WORK_MINUTES * 60)
     elif current_rep in SHORT_BREAK_REPS:
+        display_completed_work_reps()
         timer_label.config(text="SHORT\nBREAK", fg=PINK)
         count_down(SHORT_BREAK_MINUTES * 60)
     else:
         # We can assume we are now at rep 8, aka "long" break
+        display_completed_work_reps()
         current_rep = 0
         timer_label.config(text="LONG\nBREAK", fg=RED)
         count_down(LONG_BREAK_MINUTES * 60)
+
+def display_completed_work_reps():
+    global work_reps_completed
+    work_reps_completed += "✓"
+    pomodoros_completed_label.config(text=work_reps_completed)
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
@@ -75,7 +83,7 @@ def reset_timer():
 start_button = Button(text="Reset", command=reset_timer, background=PINK, foreground=YELLOW)
 start_button.grid(column=3, row=3)
 
-pomodoros_completed_label = Label(text="✓", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 40, "bold"))
+pomodoros_completed_label = Label(bg=YELLOW, fg=GREEN, font=(FONT_NAME, 40, "bold"))
 pomodoros_completed_label.grid(column=2, row=4)
 
 window.mainloop()
